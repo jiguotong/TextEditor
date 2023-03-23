@@ -8,3 +8,5 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+//Qt C++ Àà´óÈ«
+//https://doc.qt.io/qt-5/classes.html

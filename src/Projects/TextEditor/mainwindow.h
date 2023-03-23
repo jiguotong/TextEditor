@@ -1,7 +1,9 @@
-#pragma once
+#ifndef _MAINWINDOW_H_
+#define _MAINWINDOW_H_
 #include <QtWidgets/QMainWindow>
 #include "ui_mainwindow.h"
 
+class QTextEdit;
 class Mainwindow : public QMainWindow
 {
     Q_OBJECT
@@ -11,9 +13,14 @@ public:
     ~Mainwindow();
 public:
     void InitializeWindow();
+    void SetCurrentFile(const QString currentFile);
+    QString GetCurrentFile();
 
-public slots:
-    void popAboutDialog();
+private slots:
+    void OnActionAboutDialog();
+    bool OnActionOpenFile();
+    bool OnActionSaveFile();
+    bool OnActionSaveasFile();
 private:
     Ui::MainwindowClass ui;
 
@@ -33,4 +40,11 @@ private:
     QAction* action_save_as;
 
     QAction* action_about;
+
+    //中心窗口
+    QTextEdit* textEditor;
+
+    //当前打开文件
+    QString currentFile;
 };
+#endif
