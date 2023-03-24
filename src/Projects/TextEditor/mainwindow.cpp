@@ -11,6 +11,7 @@
 #include "mainwindow.h"
 #include "aboutDialog.h"
 
+QString GetCorrectUnicode(const QByteArray& text, QString& code);
 Mainwindow::Mainwindow(QWidget *parent)
     : QMainWindow(parent){
     ui.setupUi(this);
@@ -54,12 +55,9 @@ bool Mainwindow::OnActionOpenFile(){
         return false;
     }
     
+    QByteArray buf = file.readAll();
     this->SetCurrentFile(fileName);
-    setWindowTitle(fileName);
-    QTextStream textStream(&file);
-
-    QString text = textStream.readAll();
-    textEditor->setText(text);
+    textEditor->setText(GetCorrectUnicode(buf, this->currentCode));
     file.close();
 
     return true;
@@ -74,6 +72,7 @@ bool Mainwindow::OnActionSaveFile() {
     }
 
     QTextStream out(&file);
+    out.setCodec(currentCode.toLatin1().data());
     QString text = textEditor->toPlainText();
     out << text;
     file.close();
@@ -88,6 +87,7 @@ bool Mainwindow::OnActionSaveasFile() {
     }
 
     QTextStream out(&file);
+    out.setCodec(currentCode.toLatin1().data());
     QString text = textEditor->toPlainText();
     out << text;
     file.close();
@@ -105,4 +105,22 @@ QString Mainwindow::GetCurrentFile(){
     return this->currentFile;
 }
 Mainwindow::~Mainwindow(){
+}
+
+//得到正确转码之后的文本
+QString GetCorrectUnicode(const QByteArray& text, QString& code)
+{
+    QTextCodec::ConverterState state;
+    QTextCodec* codec = QTextCodec::codecForName("UTF-8");
+    QString strtext = codec->toUnicode(text.constData(), text.size(), &state);
+    if (state.invalidChars > 0){
+        code = "GBK";
+        strtext = QTextCodec::codecForName("GBK")->toUnicode(text);
+    }
+    else{
+        code = "UTF-8";
+        strtext = text;
+    }
+
+    return strtext;
 }

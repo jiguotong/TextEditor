@@ -2,7 +2,15 @@
 #define _MAINWINDOW_H_
 #include <QtWidgets/QMainWindow>
 #include "ui_mainwindow.h"
-
+//文件编码类型
+enum class EncodeFormat {
+    ANSI = 0,
+    GBK,
+    UTF8,
+    UTF16LE,
+    UTF16BE,
+    UTF8BOM,
+};
 class QTextEdit;
 class Mainwindow : public QMainWindow
 {
@@ -46,5 +54,7 @@ private:
 
     //当前打开文件
     QString currentFile;
+    //当前打开文件的编码格式
+    QString currentCode;
 };
 #endif
