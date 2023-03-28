@@ -12,7 +12,7 @@ void AboutDialog::InitializeDialog()
     this->resize(400, 200);
     this->setWindowTitle("About TextEditor");
 
-    QPixmap pix = QPixmap("..\\source\\image\\cat.jpg");
+    QPixmap pix = QPixmap(":/textEditor/res/cat.jpg");
     label_img = new QLabel(this); 
     label_img->setPixmap(pix.scaled(100,100, Qt::KeepAspectRatio));     //控制缩放
     label_img->move((this->width() - label_img->width()) / 2, (this->height() - label_img->width()) / 2);   //label居中显示

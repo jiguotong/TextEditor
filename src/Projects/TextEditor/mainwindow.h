@@ -26,6 +26,7 @@ public:
 
 private slots:
     void OnActionAboutDialog();
+    bool OnActionNewFile();
     bool OnActionOpenFile();
     bool OnActionSaveFile();
     bool OnActionSaveasFile();
