@@ -83,6 +83,7 @@ bool Mainwindow::OnActionNewFile() {
         return false;
     }
     this->SetCurrentFile(fileName);
+    return true;
 }
 
 bool Mainwindow::OnActionOpenFile(){
