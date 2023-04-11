@@ -2,6 +2,7 @@
 //
 #include <iostream>
 #include <ctime>
+#include <fstream>
 #include <string>
 class Base{
 public:
@@ -115,14 +116,64 @@ void TestClass(){
     //delete base7;
 }
 
-void Template() {
+void TestTemplate() {
     // 实例化一个类模板对象
     Display<std::string> d("hello world");
     d.display();
 
     std::cout << compare<int>(1, 2.4) << std::endl;
 }
+
+double division(int a, int b){
+    if (b == 0){
+        throw "ERROR:Division by zero condition!";
+    }
+    return (a / b);
+}
+void OpenFile(){
+    std::string path = "D:\\test.txt";
+    if (!path.empty())
+        throw 1;
+    std::ifstream fin;
+    fin.open(path, std::ios::in);
+    if (!fin.is_open()){
+        throw "ERROR:Open file failed!";
+    }
+    fin.close();
+}
+void TestException() {
+    int x = 50;
+    int y = 0;
+    double z = 0;
+
+    try {
+        z = division(x, y);
+        std::cout << z << std::endl;
+    }
+    catch (const char* msg) {
+        std::cerr << msg << std::endl;
+    }
+
+    try {
+        OpenFile();
+    }
+    catch (const char* msg) {
+        std::cerr << msg << std::endl;
+    }
+    catch (const int errCode) {
+        std::cerr << errCode << std::endl;
+    }
+    catch (...){        // 可以捕获所有异常
+        std::cerr << "ERROR!" << std::endl;
+    }
+}
+
 int main()
 {
-    Template();
+    TestException();
+    //TestTemplate();
 }
+
+
+
+
