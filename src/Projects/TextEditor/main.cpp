@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     splash.show();   //显示此启动图像
     a.processEvents();   //使得程序在显示启动画面的同时还能够响应其他事件
 
-    Sleep(4000);
+    Sleep(2000);
     Mainwindow w;
     w.show();
 

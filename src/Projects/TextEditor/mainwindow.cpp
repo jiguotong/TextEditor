@@ -11,6 +11,7 @@
 #include <QTextCodec>       //
 #include "mainwindow.h"
 #include "aboutDialog.h"
+//#include "FindWidget.h"
 
 QString GetCorrectUnicode(const QByteArray& text, QString& code);
 Mainwindow::Mainwindow(QWidget *parent)
@@ -19,7 +20,13 @@ Mainwindow::Mainwindow(QWidget *parent)
     
     InitializeWindow();
 }
-
+Mainwindow::~Mainwindow(){
+    if (textEditor) {
+        delete textEditor;
+        textEditor = NULL;
+    }
+}
+        
 void Mainwindow::InitializeWindow(){
     //设置窗口外观
     setWindowIcon(QIcon(":/textEditor/res/text.png"));
@@ -34,6 +41,7 @@ void Mainwindow::InitializeWindow(){
 
     //菜单栏编辑
     menu_file = menuBar()->addMenu("File");
+    menu_edit = menuBar()->addMenu("Edit");
     menu_help = menuBar()->addMenu("Help");
     menu_about = menuBar()->addMenu(QStringLiteral("关于"));
 
@@ -43,7 +51,9 @@ void Mainwindow::InitializeWindow(){
     action_save = menu_file->addAction("Save     (ctrl+s)");
     action_save_as = menu_file->addAction("Save as");
     action_about = menu_about->addAction("About");
-
+    
+    action_find = menu_edit->addAction("Find");
+    
     action_new->setIcon(QIcon(":/textEditor/res/create.png"));
     action_open->setIcon(QIcon(":/textEditor/res/open.png"));
     action_save->setIcon(QIcon(":/textEditor/res/save.png"));
@@ -55,7 +65,8 @@ void Mainwindow::InitializeWindow(){
     bar_tool->addAction(action_save);
 
     
-
+    // 设置快捷键
+    action_find->setShortcut(tr("Ctrl+F"));
 
     //设置快捷键
     QShortcut* shortcut = new QShortcut(this);
@@ -73,6 +84,7 @@ void Mainwindow::InitializeWindow(){
     connect(action_open, SIGNAL(triggered()), this, SLOT(OnActionOpenFile()));
     connect(action_save, SIGNAL(triggered()), this, SLOT(OnActionSaveFile()));
     connect(action_save_as, SIGNAL(triggered()), this, SLOT(OnActionSaveasFile()));
+    connect(action_find, SIGNAL(triggered()), this, SLOT(OnShowFindWidget()));
 }
 
 bool Mainwindow::OnActionNewFile() {
@@ -147,10 +159,64 @@ void Mainwindow::SetCurrentFile(const QString currentFile) {
 QString Mainwindow::GetCurrentFile(){
     return this->currentFile;
 }
+bool Mainwindow::OnShowFindWidget() {
+    findWidget = new FindWidget(this);
+    findWidget->show();
+    connect(findWidget, &FindWidget::SendText, this, &Mainwindow::recText);
+    return true;
+}
+bool Mainwindow::OnFindString()
+{
+    // 搜索高亮（只显示单个）
+    ////QString findtext = find_textLineEdit->text();//获得对话框的内容
+    //QString findtext = "hello";
+    ////if (textEditor->find(findtext, QTextDocument::FindBackward))//从光标位置向前查找
+    //if (textEditor->find(findtext))
+    //{
+    //    // 查找到后高亮显示
+    //    QPalette palette = textEditor->palette();
+    //    palette.setColor(QPalette::Highlight, palette.color(QPalette::Active, QPalette::Highlight));
+    //    textEditor->setPalette(palette);
+    //}
+    //else
+    //{
+    //    QMessageBox::information(this, "Warning", "Not find the string!", QMessageBox::Ok);
+    //    return false;
+    //}
+    //return true;
 
-Mainwindow::~Mainwindow(){
+    // 搜索全部高亮
+    QTextDocument* document = textEditor->document();
+    bool found = false;
+    QTextCursor highlight_cursor(document);
+    QTextCursor cursor(document);
+    cursor.clearSelection();
+    //开始
+    cursor.beginEditBlock();
+    QTextCharFormat color_format(highlight_cursor.charFormat());
+    //color_format.setForeground(Qt::red);
+    color_format.setBackground(Qt::yellow);
+    while (!highlight_cursor.isNull() && !highlight_cursor.atEnd()) {
+        //查找指定的文本，匹配整个单词
+        //highlight_cursor = document->find(m_findText, highlight_cursor, QTextDocument::FindWholeWords);//整字查找
+        highlight_cursor = document->find(m_findText, highlight_cursor);//整字查找
+
+        if (!highlight_cursor.isNull()) {
+            if (!found)
+                found = true;
+            highlight_cursor.mergeCharFormat(color_format);
+        }
+    }
+    cursor.endEditBlock();
+
+    return true;
 }
 
+void Mainwindow::recText(QString str) {
+    m_findText = str;
+    OnFindString();     //开始查找
+}
+// 非成员函数
 //得到正确转码之后的文本
 QString GetCorrectUnicode(const QByteArray& text, QString& code)
 {
