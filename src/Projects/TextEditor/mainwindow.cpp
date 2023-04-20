@@ -185,21 +185,30 @@ bool Mainwindow::OnFindString()
     //}
     //return true;
 
-    // 搜索全部高亮
+    // 清空全部高亮
     QTextDocument* document = textEditor->document();
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    QTextCharFormat format;
+    format.clearBackground();
+    cursor.mergeCharFormat(format);
+    textEditor->mergeCurrentCharFormat(format);
+
+    
+    // 搜索全部高亮
     bool found = false;
     QTextCursor highlight_cursor(document);
-    QTextCursor cursor(document);
-    cursor.clearSelection();
-    //开始
+
+    // 设置高亮
     cursor.beginEditBlock();
-    QTextCharFormat color_format(highlight_cursor.charFormat());
+    QTextCharFormat color_format=highlight_cursor.charFormat();
     //color_format.setForeground(Qt::red);
     color_format.setBackground(Qt::yellow);
     while (!highlight_cursor.isNull() && !highlight_cursor.atEnd()) {
-        //查找指定的文本，匹配整个单词
-        //highlight_cursor = document->find(m_findText, highlight_cursor, QTextDocument::FindWholeWords);//整字查找
-        highlight_cursor = document->find(m_findText, highlight_cursor);//整字查找
+        //查找指定的文本
+        //highlight_cursor = document->find(m_findText, highlight_cursor, QTextDocument::FindWholeWords);//整字查找，匹配整个单词
+        highlight_cursor = document->find(m_findText, highlight_cursor);
 
         if (!highlight_cursor.isNull()) {
             if (!found)
