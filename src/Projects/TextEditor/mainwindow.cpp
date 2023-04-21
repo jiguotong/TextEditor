@@ -168,16 +168,16 @@ bool Mainwindow::OnShowFindWidget() {
 bool Mainwindow::OnFindString()
 {
     // 搜索高亮（只显示单个）
-    ////QString findtext = find_textLineEdit->text();//获得对话框的内容
-    //QString findtext = "hello";
-    ////if (textEditor->find(findtext, QTextDocument::FindBackward))//从光标位置向前查找
-    //if (textEditor->find(findtext))
-    //{
-    //    // 查找到后高亮显示
-    //    QPalette palette = textEditor->palette();
-    //    palette.setColor(QPalette::Highlight, palette.color(QPalette::Active, QPalette::Highlight));
-    //    textEditor->setPalette(palette);
-    //}
+    //QString findtext = find_textLineEdit->text();//获得对话框的内容
+    QString findtext = "hello";
+    //if (textEditor->find(findtext, QTextDocument::FindBackward))//从光标位置向前查找
+    if (textEditor->find(findtext))
+    {
+        // 查找到后高亮显示
+        QPalette palette = textEditor->palette();
+        palette.setColor(QPalette::Highlight, palette.color(QPalette::Active, QPalette::Highlight));
+        textEditor->setPalette(palette);
+    }
     //else
     //{
     //    QMessageBox::information(this, "Warning", "Not find the string!", QMessageBox::Ok);
@@ -191,7 +191,7 @@ bool Mainwindow::OnFindString()
     cursor.movePosition(QTextCursor::Start);
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QTextCharFormat format;
-    format.clearBackground();
+    format.setBackground(QBrush());
     cursor.mergeCharFormat(format);
     textEditor->mergeCurrentCharFormat(format);
 
@@ -201,10 +201,12 @@ bool Mainwindow::OnFindString()
     QTextCursor highlight_cursor(document);
 
     // 设置高亮
+    cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
     QTextCharFormat color_format=highlight_cursor.charFormat();
     //color_format.setForeground(Qt::red);
     color_format.setBackground(Qt::yellow);
+    bool isFirstStr = true;
     while (!highlight_cursor.isNull() && !highlight_cursor.atEnd()) {
         //查找指定的文本
         //highlight_cursor = document->find(m_findText, highlight_cursor, QTextDocument::FindWholeWords);//整字查找，匹配整个单词
@@ -213,7 +215,15 @@ bool Mainwindow::OnFindString()
         if (!highlight_cursor.isNull()) {
             if (!found)
                 found = true;
-            highlight_cursor.mergeCharFormat(color_format);
+            if (isFirstStr){
+                color_format.setBackground(Qt::cyan);
+                highlight_cursor.mergeCharFormat(color_format);
+                isFirstStr = false;
+            }
+            else{
+                color_format.setBackground(Qt::yellow);
+                highlight_cursor.mergeCharFormat(color_format);
+            }         
         }
     }
     cursor.endEditBlock();
