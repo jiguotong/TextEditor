@@ -161,30 +161,16 @@ QString Mainwindow::GetCurrentFile(){
 }
 bool Mainwindow::OnShowFindWidget() {
     findWidget = new FindWidget(this);
+    findWidget->move(this->width() - 500, 100);
     findWidget->show();
     connect(findWidget, &FindWidget::SendText, this, &Mainwindow::recText);
+    connect(findWidget, &FindWidget::SendFindPreSignal, this, &Mainwindow::OnFindPreStr);
+    connect(findWidget, &FindWidget::SendFindNextSignal, this, &Mainwindow::OnFindNextStr);
+    connect(findWidget, &FindWidget::SendCloseSignal, this, &Mainwindow::ClearHighlight);
     return true;
 }
 bool Mainwindow::OnFindString()
 {
-    // 搜索高亮（只显示单个）
-    //QString findtext = find_textLineEdit->text();//获得对话框的内容
-    QString findtext = "hello";
-    //if (textEditor->find(findtext, QTextDocument::FindBackward))//从光标位置向前查找
-    if (textEditor->find(findtext))
-    {
-        // 查找到后高亮显示
-        QPalette palette = textEditor->palette();
-        palette.setColor(QPalette::Highlight, palette.color(QPalette::Active, QPalette::Highlight));
-        textEditor->setPalette(palette);
-    }
-    //else
-    //{
-    //    QMessageBox::information(this, "Warning", "Not find the string!", QMessageBox::Ok);
-    //    return false;
-    //}
-    //return true;
-
     // 清空全部高亮
     QTextDocument* document = textEditor->document();
     QTextCursor cursor(document);
@@ -215,25 +201,85 @@ bool Mainwindow::OnFindString()
         if (!highlight_cursor.isNull()) {
             if (!found)
                 found = true;
-            if (isFirstStr){
-                color_format.setBackground(Qt::cyan);
-                highlight_cursor.mergeCharFormat(color_format);
-                isFirstStr = false;
-            }
-            else{
-                color_format.setBackground(Qt::yellow);
-                highlight_cursor.mergeCharFormat(color_format);
-            }         
+            color_format.setBackground(Qt::yellow);
+            highlight_cursor.mergeCharFormat(color_format);
         }
     }
     cursor.endEditBlock();
+    return true;
+}
+
+bool Mainwindow::OnFindPreStr() {
+    if (m_findText.isEmpty())
+        return false;
+    //// debugg_test
+    //QMessageBox::information(this, "Warning", "Find previous!", QMessageBox::Ok);
+    // 查找上一个
+    if (textEditor->find(m_findText, QTextDocument::FindBackward)) {
+        // 查找到后高亮显示
+        QPalette palette = textEditor->palette();
+        palette.setColor(QPalette::Highlight, palette.color(QPalette::Active, QPalette::Highlight));
+        textEditor->setPalette(palette);
+    }
+    else {
+        QMessageBox::information(this, "Warning", "Already reached the top!", QMessageBox::Ok);
+        return false;
+    }
+    return true;
+}
+
+bool Mainwindow::OnFindNextStr() {
+    if (m_findText.isEmpty())
+        return false;
+    // 查找下一个
+    if (textEditor->find(m_findText)) {
+        // 查找到后高亮显示
+        QPalette palette = textEditor->palette();
+        palette.setColor(QPalette::Highlight, palette.color(QPalette::Active, QPalette::Highlight));
+        textEditor->setPalette(palette);
+    }
+    else {
+        QMessageBox::information(this, "Warning", "Already reached the bottom!", QMessageBox::Ok);
+        return false;
+    }
 
     return true;
 }
 
 void Mainwindow::recText(QString str) {
+    // 高亮显示所有
     m_findText = str;
     OnFindString();     //开始查找
+
+    // 重置光标
+    QTextCursor tmpCursor = textEditor->textCursor();
+    tmpCursor.movePosition(QTextCursor::Start);
+    textEditor->setTextCursor(tmpCursor);
+
+    // 高亮显示第一个串
+    OnFindNextStr();
+}
+void Mainwindow::ClearHighlight(){
+    // 清空高亮
+    QTextDocument* document = textEditor->document();
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    QTextCharFormat format;
+    format.setBackground(QBrush());
+    cursor.mergeCharFormat(format);
+    textEditor->mergeCurrentCharFormat(format);
+
+    // 销毁搜索对话框
+    m_findText.clear();
+    findWidget->destroyed();
+    delete findWidget;
+    findWidget = NULL;
+
+    // 重置光标
+    QTextCursor tmpCursor = textEditor->textCursor();
+    tmpCursor.movePosition(QTextCursor::Start);
+    textEditor->setTextCursor(tmpCursor);
 }
 // 非成员函数
 //得到正确转码之后的文本

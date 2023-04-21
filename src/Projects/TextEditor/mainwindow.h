@@ -29,7 +29,12 @@ private slots:
     void OnActionAboutDialog();
     bool OnShowFindWidget();
     bool OnFindString();
+    // 查找替换相关
     bool OnActionNewFile();
+    bool OnFindPreStr();
+    bool OnFindNextStr();
+    void ClearHighlight();
+
     bool OnActionOpenFile();
     bool OnActionSaveFile();
     bool OnActionSaveasFile();
@@ -64,7 +69,7 @@ private:
     //查找窗口
     FindWidget* findWidget;
     QString m_findText;           // 需要查找的字符串
-    QString replaceText;        // 需要替换为的字符串
+    QString replaceText;          // 需要替换为的字符串
 
     //当前打开文件
     QString currentFile;
