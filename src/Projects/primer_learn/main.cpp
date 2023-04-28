@@ -1,5 +1,6 @@
-#include<iostream>
-#include<exception>
+#include <iostream>
+#include <exception>
+#include "testForCallback.h"
 using namespace std;
 
 const string errorCode = "I don't like this number.";
@@ -9,6 +10,11 @@ class MyException : public logic_error {
 public:
     explicit MyException(const string& s = errorCode) :logic_error(s) {}
 };
+
+typedef int (*p_fun)(const int a, const int b);
+int Add(const int a, const int b);
+int operateFun(const int, const int, p_fun);
+
 
 void TestExceptions() {
     int input;
@@ -62,7 +68,41 @@ void TestExceptions() {
         cout << endl;
     }
 }
+
+void TestFunPointer() {
+    int result = Add(5, 7);
+    std::cout << result << std::endl;
+
+    int (*ptr)(const int, const int);
+    ptr = Add;
+    result = ptr(8, 9);
+    std::cout << result << std::endl;
+
+    p_fun fun;
+    fun = &Add;
+    result = fun(10, 5);
+    std::cout << result << std::endl;
+
+    std::cout << operateFun(19, 27, fun) << std::endl;
+}
+
+void TestCallBack() {
+    B b;
+    b.excute();
+}
+
+
 int main() {
-    TestExceptions();
+    //TestExceptions();
+    //TestFunPointer();
+    TestCallBack();
     return 0;
+}
+
+// test for callback
+int Add(const int a, const int b) {
+    return a + b;
+}
+int operateFun(const int a, const int b, p_fun ptr) {
+    return ptr(a, b);
 }

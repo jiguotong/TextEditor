@@ -14,8 +14,8 @@
 //#include "FindWidget.h"
 
 QString GetCorrectUnicode(const QByteArray& text, QString& code);
-Mainwindow::Mainwindow(QWidget *parent)
-    : QMainWindow(parent){
+Mainwindow::Mainwindow(char* filePath,QWidget *parent)
+    : currentFile(filePath),QMainWindow(parent){
     ui.setupUi(this);
     
     InitializeWindow();
@@ -78,6 +78,18 @@ void Mainwindow::InitializeWindow(){
     textEditor = new QTextEdit(this);
     setCentralWidget(textEditor);
 
+    //判断当前是否有文档打开
+    if (!currentFile.isEmpty()){
+        QFile file(currentFile);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, "Warning", "Fail to open file: " + file.errorString());
+            return;
+        }
+        QByteArray buf = file.readAll();
+        textEditor->setText(GetCorrectUnicode(buf, this->currentCode));
+        file.close();
+    }
+    
     //连接信号和槽
     connect(action_about, SIGNAL(triggered()), this, SLOT(OnActionAboutDialog()));
     connect(action_new, SIGNAL(triggered()), this, SLOT(OnActionNewFile()));
@@ -169,6 +181,7 @@ bool Mainwindow::OnShowFindWidget() {
     connect(findWidget, &FindWidget::SendCloseSignal, this, &Mainwindow::ClearHighlight);
     return true;
 }
+
 bool Mainwindow::OnFindString()
 {
     // 清空全部高亮
