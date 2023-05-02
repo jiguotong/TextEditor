@@ -1,6 +1,7 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 #include <QtWidgets/QMainWindow>
+#include <QLabel>
 #include "ui_mainwindow.h"
 #include "FindWidget.h"
 //文件编码类型
@@ -38,8 +39,13 @@ private slots:
     bool OnActionOpenFile();
     bool OnActionSaveFile();
     bool OnActionSaveasFile();
+    void OnCursorPosChanged();
+    void updateStatusBar(const int row, const int col);
 
     void recText(QString str);
+
+private:
+    /*void mousePressEvent(QMouseEvent* ev);*/
 private:
     Ui::MainwindowClass ui;
 
@@ -63,6 +69,8 @@ private:
     QAction* action_replace;
     QAction* action_about;
 
+    // 状态栏信息
+    QLabel* posLabel;
     //中心窗口
     QTextEdit* textEditor;
 

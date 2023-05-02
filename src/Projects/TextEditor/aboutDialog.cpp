@@ -9,7 +9,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
 void AboutDialog::InitializeDialog()
 {
-    this->resize(400, 200);
+    this->setFixedSize(500, 200);
     this->setWindowTitle("About TextEditor");
 
     QPixmap pix = QPixmap(":/textEditor/res/cat.jpg");
@@ -19,9 +19,8 @@ void AboutDialog::InitializeDialog()
 
 
     label_text = new QLabel(this);
-    label_text->setText("Welcome to use this text editor which is developed by Taibai.Li!\nI sincerely hope that you could have a nice day");
-    //label_text->move((this->width() - label_text->width()) / 2, 0);
-    //label_introduction->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    label_text->setText("Welcome to use this text editor which is developed by Taibai.Li!\nI sincerely hope that you could have a nice day!");
+    label_text->setFont(QFont("STKaiti",14));
     label_text->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 }
 

@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'FindWidgetumoXKH.ui'
+** Form generated from reading UI file 'FindWidgetOGOCGf.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.14.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef FINDWIDGETUMOXKH_H
-#define FINDWIDGETUMOXKH_H
+#ifndef FINDWIDGETOGOCGF_H
+#define FINDWIDGETOGOCGF_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
@@ -31,21 +31,23 @@ public:
     {
         if (FindWidgetClass->objectName().isEmpty())
             FindWidgetClass->setObjectName(QString::fromUtf8("FindWidgetClass"));
-        FindWidgetClass->resize(557, 72);
+        FindWidgetClass->resize(560, 70);
+        FindWidgetClass->setMinimumSize(QSize(560, 70));
+        FindWidgetClass->setMaximumSize(QSize(560, 70));
         centralWidget = new QWidget(FindWidgetClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         editor = new QTextEdit(centralWidget);
         editor->setObjectName(QString::fromUtf8("editor"));
-        editor->setGeometry(QRect(20, 10, 231, 31));
+        editor->setGeometry(QRect(20, 19, 231, 31));
         btnNextString = new QPushButton(centralWidget);
         btnNextString->setObjectName(QString::fromUtf8("btnNextString"));
-        btnNextString->setGeometry(QRect(360, 10, 75, 23));
+        btnNextString->setGeometry(QRect(360, 23, 75, 23));
         btnPreString = new QPushButton(centralWidget);
         btnPreString->setObjectName(QString::fromUtf8("btnPreString"));
-        btnPreString->setGeometry(QRect(280, 10, 75, 23));
+        btnPreString->setGeometry(QRect(280, 23, 75, 23));
         btnClose = new QPushButton(centralWidget);
         btnClose->setObjectName(QString::fromUtf8("btnClose"));
-        btnClose->setGeometry(QRect(450, 10, 75, 23));
+        btnClose->setGeometry(QRect(450, 23, 75, 23));
         FindWidgetClass->setCentralWidget(centralWidget);
 
         retranslateUi(FindWidgetClass);
@@ -69,4 +71,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // FINDWIDGETUMOXKH_H
+#endif // FINDWIDGETOGOCGF_H

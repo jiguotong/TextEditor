@@ -1,11 +1,26 @@
 #include "mainwindow.h"
 #include <QtWidgets/QApplication>
 #include <QSplashScreen>
+#include <QMessageBox>
+#include <QTime>
 #include <windows.h>
 
 int main(int argc, char *argv[])
 {
+    
     QApplication a(argc, argv);
+
+    /*时间有效期为3天，三天后不可用！*/
+    QDateTime baseTime = QDateTime::fromString("2023-05-02 00:00:00", "yyyy-MM-dd hh:mm:ss");       // 规定一个初始化基准时间
+    QDateTime currentTime = QDateTime::currentDateTime();                                           //获取系统当前的时间
+    int startTime = baseTime.toTime_t();        //将当前时间转为时间戳
+    int endTime = currentTime.toTime_t();       //将当前时间转为时间戳
+    if (endTime - startTime > 259200) {
+        QMessageBox::warning(NULL, "Error", "Time permission exceeded! Please contact the developer!");
+        return -1;
+    }
+
+    // 进入程序
     for (size_t i = 0; i < argc; i++){
         printf("argv[%d]:%s\n",i, argv[i]);
     }

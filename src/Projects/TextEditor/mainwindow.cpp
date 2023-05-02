@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QShortcut>
-#include <QTextCodec>       //
+#include <QTextCodec>
 #include "mainwindow.h"
 #include "aboutDialog.h"
 //#include "FindWidget.h"
@@ -48,7 +48,7 @@ void Mainwindow::InitializeWindow(){
     //功能编辑
     action_new = menu_file->addAction("New");
     action_open = menu_file->addAction("Open");
-    action_save = menu_file->addAction("Save     (ctrl+s)");
+    action_save = menu_file->addAction("Save");
     action_save_as = menu_file->addAction("Save as");
     action_about = menu_about->addAction("About");
     
@@ -66,16 +66,29 @@ void Mainwindow::InitializeWindow(){
 
     
     // 设置快捷键
+    action_save->setShortcut(tr("Ctrl+S"));
     action_find->setShortcut(tr("Ctrl+F"));
 
     //设置快捷键
-    QShortcut* shortcut = new QShortcut(this);
+    /*QShortcut* shortcut = new QShortcut(this);
     shortcut->setKey(QKeySequence("Ctrl+S"));
     shortcut->setContext(Qt::ApplicationShortcut);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(OnActionSaveFile()));
+    connect(shortcut, SIGNAL(activated()), this, SLOT(OnActionSaveFile()));*/
+
+    /*QLabel *aixLabel;
+    aixLabel = new QLabel("\"CTRL + H\" for help");*/
+
+    bar_status->setStyleSheet(QString("QStatusBar::item{border: 0px}")); // 设置不显示label的边框
+    bar_status->setSizeGripEnabled(true); //设置是否显示右边的大小控制点
+    posLabel = new QLabel(bar_status);
+    bar_status->addWidget(posLabel);
+
+    QLabel* per1 = new QLabel("Welcome", this);
+    bar_status->addPermanentWidget(per1); //现实永久信息
 
     //设置中心窗口属性
     textEditor = new QTextEdit(this);
+    textEditor->setFont(QFont("Consolas", 11));
     setCentralWidget(textEditor);
 
     //判断当前是否有文档打开
@@ -97,6 +110,7 @@ void Mainwindow::InitializeWindow(){
     connect(action_save, SIGNAL(triggered()), this, SLOT(OnActionSaveFile()));
     connect(action_save_as, SIGNAL(triggered()), this, SLOT(OnActionSaveasFile()));
     connect(action_find, SIGNAL(triggered()), this, SLOT(OnShowFindWidget()));
+    connect(textEditor, &QTextEdit::cursorPositionChanged, this, &Mainwindow::OnCursorPosChanged);
 }
 
 bool Mainwindow::OnActionNewFile() {
@@ -171,9 +185,14 @@ void Mainwindow::SetCurrentFile(const QString currentFile) {
 QString Mainwindow::GetCurrentFile(){
     return this->currentFile;
 }
+
 bool Mainwindow::OnShowFindWidget() {
     findWidget = new FindWidget(this);
-    findWidget->move(this->width() - 500, 100);
+    QPoint globalPos = this->mapToGlobal(QPoint(0, 0));//父窗口绝对坐标
+    int ax = globalPos.x() + (this->width() - findWidget->width()) / 2;//x坐标
+    int ay = globalPos.y() + (this->height() - findWidget->height()) / 2;//y坐标
+
+    findWidget->move(ax, ay);
     findWidget->show();
     connect(findWidget, &FindWidget::SendText, this, &Mainwindow::recText);
     connect(findWidget, &FindWidget::SendFindPreSignal, this, &Mainwindow::OnFindPreStr);
@@ -271,6 +290,40 @@ void Mainwindow::recText(QString str) {
 
     // 高亮显示第一个串
     OnFindNextStr();
+}
+
+void Mainwindow::OnCursorPosChanged() {
+    int row, col;
+    QTextCursor cursor;
+    QString str;
+
+    cursor = textEditor->textCursor();
+    row = cursor.blockNumber() + 1;     // 行数从1开始
+    col = cursor.columnNumber();
+    
+    //console debug
+    //printf("row:%d col:%d\n", row, col);
+
+    // 更新状态栏
+    updateStatusBar(row, col);
+}
+
+//void Mainwindow::mousePressEvent(QMouseEvent* ev) {
+//    int row, col;
+//    QTextCursor cursor;
+//    QString str;
+//
+//    cursor = textEditor->textCursor();
+//    row = cursor.blockNumber();
+//    col = cursor.columnNumber();
+//
+//    printf("row:%d col:%d\n", row, col);
+//
+//}
+void Mainwindow::updateStatusBar(const int row,const int col) {
+    posLabel->setText(QString("Row:%1 Col:%2")
+        .arg(row).arg(col));
+    bar_status->addWidget(posLabel);
 }
 void Mainwindow::ClearHighlight(){
     // 清空高亮
