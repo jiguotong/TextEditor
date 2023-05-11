@@ -66,6 +66,7 @@ void Mainwindow::InitializeWindow(){
 
     
     // 设置快捷键
+    action_open->setShortcut(tr("Ctrl+O"));
     action_save->setShortcut(tr("Ctrl+S"));
     action_find->setShortcut(tr("Ctrl+F"));
 
@@ -83,8 +84,16 @@ void Mainwindow::InitializeWindow(){
     posLabel = new QLabel(bar_status);
     bar_status->addWidget(posLabel);
 
-    QLabel* per1 = new QLabel("Welcome", this);
-    bar_status->addPermanentWidget(per1); //现实永久信息
+	QLabel* perLabel = new QLabel(QStringLiteral("随便写写"), this);
+	bar_status->insertPermanentWidget(1, perLabel); //现实永久信息
+
+
+    codeLabel = new QLabel(bar_status);
+    bar_status->addWidget(codeLabel);
+
+    //QLabel* per1 = new QLabel("Welcome", this);
+    //bar_status->addPermanentWidget(per1); //现实永久信息
+
 
     //设置中心窗口属性
     textEditor = new QTextEdit(this);
@@ -195,6 +204,8 @@ bool Mainwindow::OnShowFindWidget() {
     findWidget->move(ax, ay);
     findWidget->show();
     connect(findWidget, &FindWidget::SendText, this, &Mainwindow::recText);
+    connect(findWidget, &FindWidget::SendReplaceText, this, &Mainwindow::rectReplaceText);
+
     connect(findWidget, &FindWidget::SendFindPreSignal, this, &Mainwindow::OnFindPreStr);
     connect(findWidget, &FindWidget::SendFindNextSignal, this, &Mainwindow::OnFindNextStr);
     connect(findWidget, &FindWidget::SendCloseSignal, this, &Mainwindow::ClearHighlight);
@@ -292,6 +303,21 @@ void Mainwindow::recText(QString str) {
     OnFindNextStr();
 }
 
+void Mainwindow::rectReplaceText(QString str) {
+    m_replaceText = str;
+
+    OnFindString();     //开始查找
+
+	// 重置光标
+	QTextCursor tmpCursor = textEditor->textCursor();
+	tmpCursor.movePosition(QTextCursor::Start);
+	textEditor->setTextCursor(tmpCursor);
+
+	// 高亮显示第一个串
+	if(!OnFindNextStr())
+		QMessageBox::information(this, "Warning", "wufatihuan", QMessageBox::Ok);
+}
+
 void Mainwindow::OnCursorPosChanged() {
     int row, col;
     QTextCursor cursor;
@@ -321,9 +347,10 @@ void Mainwindow::OnCursorPosChanged() {
 //
 //}
 void Mainwindow::updateStatusBar(const int row,const int col) {
-    posLabel->setText(QString("Row:%1 Col:%2")
+    posLabel->setText(QString("Row:%1 Col:%2\t\t")
         .arg(row).arg(col));
-    bar_status->addWidget(posLabel);
+
+    codeLabel->setText(this->currentCode);
 }
 void Mainwindow::ClearHighlight(){
     // 清空高亮

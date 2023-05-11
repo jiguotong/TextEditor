@@ -43,6 +43,7 @@ private slots:
     void updateStatusBar(const int row, const int col);
 
     void recText(QString str);
+    void rectReplaceText(QString str);
 
 private:
     /*void mousePressEvent(QMouseEvent* ev);*/
@@ -71,13 +72,14 @@ private:
 
     // 状态栏信息
     QLabel* posLabel;
+    QLabel* codeLabel;
     //中心窗口
     QTextEdit* textEditor;
 
     //查找窗口
     FindWidget* findWidget;
     QString m_findText;           // 需要查找的字符串
-    QString replaceText;          // 需要替换为的字符串
+    QString m_replaceText;          // 需要替换为的字符串
 
     //当前打开文件
     QString currentFile;

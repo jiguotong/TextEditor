@@ -13,6 +13,7 @@ public:
 	bool GetText(QString& findText);
 signals:
 	void SendText(QString str);
+	void SendReplaceText(QString str);
 	void SendFindPreSignal();
 	void SendFindNextSignal();
 	void SendCloseSignal();
@@ -22,6 +23,9 @@ private slots:
 	void OnBtnFindPre();
 	void OnBtnFindNext();
 	void OnBtnCloseWidget();
+	void OnBtnSwitchReplace();
+	void OnBtnReplaceClicked();
 private:
 	Ui::FindWidgetClass ui;
+	bool m_switchReplace;
 };

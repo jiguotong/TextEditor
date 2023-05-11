@@ -6,30 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>70</height>
+    <width>600</width>
+    <height>119</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>560</width>
-    <height>70</height>
+    <width>10</width>
+    <height>10</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>560</width>
-    <height>70</height>
+    <width>1000</width>
+    <height>1000</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>FindWidget</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextEdit" name="editor">
+   <widget class="QTextEdit" name="editorFind">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>60</x>
       <y>19</y>
       <width>231</width>
       <height>31</height>
@@ -39,7 +39,7 @@
    <widget class="QPushButton" name="btnNextString">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>400</x>
       <y>23</y>
       <width>75</width>
       <height>23</height>
@@ -52,7 +52,7 @@
    <widget class="QPushButton" name="btnPreString">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>320</x>
       <y>23</y>
       <width>75</width>
       <height>23</height>
@@ -65,7 +65,7 @@
    <widget class="QPushButton" name="btnClose">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>490</x>
       <y>23</y>
       <width>75</width>
       <height>23</height>
@@ -73,6 +73,69 @@
     </property>
     <property name="text">
      <string>关闭</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="editorReplace">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>70</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnReplace">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>70</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Replace</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnReplaceAll">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>70</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Replace all</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnOpenReplace">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>↓</string>
     </property>
    </widget>
   </widget>
