@@ -43,8 +43,11 @@ private slots:
     void updateStatusBar(const int row, const int col);
 
     void recText(QString str);
-    void rectReplaceText(QString str);
+    void rectReplaceText(QString str, ReplaceType type);
 
+public:
+    void OnReplaceStr();
+    void OnReplaceStrAll();
 private:
     /*void mousePressEvent(QMouseEvent* ev);*/
 private:

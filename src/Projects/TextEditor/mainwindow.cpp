@@ -9,6 +9,7 @@
 #include <QTextStream>
 #include <QShortcut>
 #include <QTextCodec>
+#include <QTextBlock>
 #include "mainwindow.h"
 #include "aboutDialog.h"
 //#include "FindWidget.h"
@@ -239,6 +240,7 @@ bool Mainwindow::OnFindString()
     while (!highlight_cursor.isNull() && !highlight_cursor.atEnd()) {
         //查找指定的文本
         //highlight_cursor = document->find(m_findText, highlight_cursor, QTextDocument::FindWholeWords);//整字查找，匹配整个单词
+        //printf("position:%d\n", highlight_cursor.position());
         highlight_cursor = document->find(m_findText, highlight_cursor);
 
         if (!highlight_cursor.isNull()) {
@@ -303,20 +305,31 @@ void Mainwindow::recText(QString str) {
     OnFindNextStr();
 }
 
-void Mainwindow::rectReplaceText(QString str) {
+void Mainwindow::rectReplaceText(QString str, ReplaceType type) {
     m_replaceText = str;
-
-    OnFindString();     //开始查找
-
-	// 重置光标
-	QTextCursor tmpCursor = textEditor->textCursor();
-	tmpCursor.movePosition(QTextCursor::Start);
-	textEditor->setTextCursor(tmpCursor);
-
-	// 高亮显示第一个串
-	if(!OnFindNextStr())
-		QMessageBox::information(this, "Warning", "wufatihuan", QMessageBox::Ok);
+    if (m_findText.isEmpty()) {
+        QMessageBox::information(this, "Warning", "", QMessageBox::Ok);
+        return;
+    }
+    if (!textEditor->textCursor().hasSelection())
+        return;
+	if(type== ReplaceType::one)
+        OnReplaceStr();
+    else 
+        OnReplaceStrAll();
 }
+void Mainwindow::OnReplaceStr() {
+	QTextCursor currentCursor = textEditor->textCursor();
+	currentCursor.insertText(m_replaceText);
+    OnFindNextStr();
+}
+void Mainwindow::OnReplaceStrAll() {
+    while (textEditor->textCursor().hasSelection()) {
+        textEditor->textCursor().insertText(m_replaceText);
+        OnFindNextStr();
+    }
+}
+
 
 void Mainwindow::OnCursorPosChanged() {
     int row, col;

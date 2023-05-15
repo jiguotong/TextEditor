@@ -18,6 +18,7 @@ FindWidget::FindWidget(QWidget*parent)
 	// Á¬½Ó
 	connect(ui.editorFind, SIGNAL(textChanged()), this, SLOT(OnTextChanged()));
 	connect(ui.btnReplace, &QPushButton::clicked, this, &FindWidget::OnBtnReplaceClicked);
+	connect(ui.btnReplaceAll, &QPushButton::clicked, this, &FindWidget::OnBtnReplaceAllClicked);
 	connect(ui.btnPreString, &QPushButton::clicked, this, &FindWidget::OnBtnFindPre);
 	connect(ui.btnNextString, &QPushButton::clicked, this, &FindWidget::OnBtnFindNext);
 	connect(ui.btnClose, &QPushButton::clicked, this, &FindWidget::OnBtnCloseWidget);
@@ -47,7 +48,10 @@ void FindWidget::OnBtnCloseWidget() {
 	emit SendCloseSignal();
 }
 void FindWidget::OnBtnReplaceClicked() {
-	emit SendReplaceText(ui.editorReplace->toPlainText());
+	emit SendReplaceText(ui.editorReplace->toPlainText(), ReplaceType::one);
+}
+void FindWidget::OnBtnReplaceAllClicked(){
+	emit SendReplaceText(ui.editorReplace->toPlainText(), ReplaceType::all);
 }
 
 void FindWidget::OnBtnSwitchReplace()
