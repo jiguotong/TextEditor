@@ -6,5 +6,6 @@
         <file>res/splash.png</file>
         <file>res/cat.jpg</file>
         <file>res/splash_zy.png</file>
+        <file>res/replace.png</file>
     </qresource>
 </RCC>

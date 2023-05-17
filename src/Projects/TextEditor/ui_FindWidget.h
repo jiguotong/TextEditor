@@ -1,15 +1,16 @@
 /********************************************************************************
-** Form generated from reading UI file 'FindWidgetUSUeCF.ui'
+** Form generated from reading UI file 'FindWidgetitzNSx.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.14.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef FINDWIDGETUSUECF_H
-#define FINDWIDGETUSUECF_H
+#ifndef FINDWIDGETITZNSX_H
+#define FINDWIDGETITZNSX_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
@@ -35,7 +36,7 @@ public:
     {
         if (FindWidgetClass->objectName().isEmpty())
             FindWidgetClass->setObjectName(QString::fromUtf8("FindWidgetClass"));
-        FindWidgetClass->resize(582, 117);
+        FindWidgetClass->resize(600, 119);
         FindWidgetClass->setMinimumSize(QSize(10, 10));
         FindWidgetClass->setMaximumSize(QSize(1000, 1000));
         centralWidget = new QWidget(FindWidgetClass);
@@ -73,7 +74,10 @@ public:
         btnReplaceAll->setFont(font1);
         btnOpenReplace = new QPushButton(centralWidget);
         btnOpenReplace->setObjectName(QString::fromUtf8("btnOpenReplace"));
-        btnOpenReplace->setGeometry(QRect(10, 20, 31, 31));
+        btnOpenReplace->setGeometry(QRect(10, 19, 30, 30));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8("res/replace.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btnOpenReplace->setIcon(icon);
         FindWidgetClass->setCentralWidget(centralWidget);
 
         retranslateUi(FindWidgetClass);
@@ -89,7 +93,7 @@ public:
         btnClose->setText(QCoreApplication::translate("FindWidgetClass", "\345\205\263\351\227\255", nullptr));
         btnReplace->setText(QCoreApplication::translate("FindWidgetClass", "Replace", nullptr));
         btnReplaceAll->setText(QCoreApplication::translate("FindWidgetClass", "Replace all", nullptr));
-        btnOpenReplace->setText(QCoreApplication::translate("FindWidgetClass", "\342\206\223", nullptr));
+        btnOpenReplace->setText(QString());
     } // retranslateUi
 
 };
@@ -100,4 +104,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // FINDWIDGETUSUECF_H
+#endif // FINDWIDGETITZNSX_H

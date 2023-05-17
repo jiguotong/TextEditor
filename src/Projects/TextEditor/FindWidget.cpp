@@ -1,5 +1,4 @@
 #include "FindWidget.h"
-
 FindWidget::FindWidget(QWidget*parent)
 	: QMainWindow(parent)
 {
@@ -14,6 +13,8 @@ FindWidget::FindWidget(QWidget*parent)
 
 	this->resize(600, 60);
 	m_switchReplace = false;
+
+	ui.btnOpenReplace->setIcon(QIcon(":/textEditor/res/replace.png"));
 
 	// 连接
 	connect(ui.editorFind, SIGNAL(textChanged()), this, SLOT(OnTextChanged()));
@@ -45,6 +46,7 @@ void FindWidget::OnBtnFindNext() {
 	emit SendFindNextSignal();
 }
 void FindWidget::OnBtnCloseWidget() {
+	this->close();
 	emit SendCloseSignal();
 }
 void FindWidget::OnBtnReplaceClicked() {
@@ -65,4 +67,10 @@ void FindWidget::OnBtnSwitchReplace()
 		this->resize(600, 120);
 	}
 		
+}
+
+void FindWidget::closeEvent(QCloseEvent* e) {
+	// 想要实现的操作
+	emit SendCloseSignal();
+	this->close();
 }

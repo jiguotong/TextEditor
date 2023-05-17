@@ -129,18 +129,23 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>31</width>
-      <height>31</height>
+      <y>19</y>
+      <width>30</width>
+      <height>30</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/textEditor/res/replace.png);</string>
+    </property>
     <property name="text">
-     <string>↓</string>
+     <string/>
     </property>
    </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="mainwindow.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -16,7 +16,7 @@
 
 QString GetCorrectUnicode(const QByteArray& text, QString& code);
 Mainwindow::Mainwindow(char* filePath,QWidget *parent)
-    : currentFile(filePath),QMainWindow(parent){
+    : currentFile(QString::fromLocal8Bit(filePath)),QMainWindow(parent){
     ui.setupUi(this);
     
     InitializeWindow();
@@ -30,7 +30,7 @@ Mainwindow::~Mainwindow(){
         
 void Mainwindow::InitializeWindow(){
     //设置窗口外观
-    setWindowIcon(QIcon(":/textEditor/res/text.png"));
+    setWindowIcon(QIcon(":/textEditor/res/splash_zy.png"));
     setWindowTitle("Text Editor");
     this->setWindowFlags(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
     this->showMaximized();
@@ -103,6 +103,7 @@ void Mainwindow::InitializeWindow(){
 
     //判断当前是否有文档打开
     if (!currentFile.isEmpty()){
+        printf("currentFile:%s\n", currentFile);
         QFile file(currentFile);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QMessageBox::warning(this, "Warning", "Fail to open file: " + file.errorString());
@@ -378,9 +379,10 @@ void Mainwindow::ClearHighlight(){
 
     // 销毁搜索对话框
     m_findText.clear();
-    findWidget->destroyed();
-    delete findWidget;
-    findWidget = NULL;
+    m_replaceText.clear();
+    //findWidget->destroyed();
+    /*delete findWidget;
+    findWidget = NULL;*/
 
     // 重置光标
     QTextCursor tmpCursor = textEditor->textCursor();

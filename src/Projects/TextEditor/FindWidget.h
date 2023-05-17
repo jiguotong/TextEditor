@@ -30,6 +30,8 @@ private slots:
 	void OnBtnSwitchReplace();
 	void OnBtnReplaceClicked();
 	void OnBtnReplaceAllClicked();
+public:
+	void closeEvent(QCloseEvent* e);
 private:
 	Ui::FindWidgetClass ui;
 	bool m_switchReplace;
