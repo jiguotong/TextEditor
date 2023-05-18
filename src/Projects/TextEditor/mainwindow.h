@@ -48,6 +48,7 @@ private slots:
 public:
     void OnReplaceStr();
     void OnReplaceStrAll();
+    void HelpFunction();
 private:
     /*void mousePressEvent(QMouseEvent* ev);*/
 private:

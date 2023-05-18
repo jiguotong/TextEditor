@@ -80,6 +80,9 @@ void Mainwindow::InitializeWindow(){
     /*QLabel *aixLabel;
     aixLabel = new QLabel("\"CTRL + H\" for help");*/
 
+
+    menu_help->addAction("Help", this, &Mainwindow::HelpFunction);
+
     bar_status->setStyleSheet(QString("QStatusBar::item{border: 0px}")); // 设置不显示label的边框
     bar_status->setSizeGripEnabled(true); //设置是否显示右边的大小控制点
     posLabel = new QLabel(bar_status);
@@ -125,7 +128,17 @@ void Mainwindow::InitializeWindow(){
 }
 
 bool Mainwindow::OnActionNewFile() {
-    QString fileName = QFileDialog::getSaveFileName(this, "new file dialog", "D:", "text files(*.txt);;my files(*.jgt)");
+    // 弹出提示，是否要保存当前文档
+	QMessageBox::StandardButton result = QMessageBox::question(this, "Info", QStringLiteral("是否要保存当前文档？"));
+    if (result == QMessageBox::StandardButton::Yes)
+        OnActionSaveFile();
+
+    // 新建新的文档
+    textEditor->clear();
+    QString fileName = QFileDialog::getSaveFileName(this, QStringLiteral("新建文档"), "D:", "text files(*.txt);;my files(*.jgt)");
+    // 判断有没有取消
+	if (fileName.isEmpty())
+		return false;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         QMessageBox::warning(this, "Warning", "Fail to create file: " + file.errorString());
@@ -137,6 +150,8 @@ bool Mainwindow::OnActionNewFile() {
 
 bool Mainwindow::OnActionOpenFile(){
     QString fileName = QFileDialog::getOpenFileName(this, "open file dialog", "D:", "text files(*.txt);;my files(*.jgt)");
+    if (fileName.isEmpty())
+        return false;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, "Warning", "Fail to open file: " + file.errorString());
@@ -153,7 +168,8 @@ bool Mainwindow::OnActionOpenFile(){
 
 bool Mainwindow::OnActionSaveFile() {
     QString fileName = this->GetCurrentFile();
-
+    if (fileName.isEmpty())
+        return false;
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, "Warning", "Fail to save file: " + file.errorString());
@@ -170,6 +186,9 @@ bool Mainwindow::OnActionSaveFile() {
 
 bool Mainwindow::OnActionSaveasFile() {
     QString fileName = QFileDialog::getSaveFileName(this, "save file dialog", "D:", "text files(*.txt);;my files(*.jgt)");
+	// 判断有没有取消
+	if (fileName.isEmpty())
+		return false;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         QMessageBox::warning(this, "Warning", "Fail to open file: " + file.errorString());
@@ -319,18 +338,23 @@ void Mainwindow::rectReplaceText(QString str, ReplaceType type) {
     else 
         OnReplaceStrAll();
 }
+
 void Mainwindow::OnReplaceStr() {
 	QTextCursor currentCursor = textEditor->textCursor();
 	currentCursor.insertText(m_replaceText);
     OnFindNextStr();
 }
+
 void Mainwindow::OnReplaceStrAll() {
+    QTextCursor currentCursor = textEditor->textCursor();
+    currentCursor.movePosition(QTextCursor::Start);
+    textEditor->setTextCursor(currentCursor);
+    OnFindNextStr();
     while (textEditor->textCursor().hasSelection()) {
         textEditor->textCursor().insertText(m_replaceText);
         OnFindNextStr();
     }
 }
-
 
 void Mainwindow::OnCursorPosChanged() {
     int row, col;
@@ -366,6 +390,7 @@ void Mainwindow::updateStatusBar(const int row,const int col) {
 
     codeLabel->setText(this->currentCode);
 }
+
 void Mainwindow::ClearHighlight(){
     // 清空高亮
     QTextDocument* document = textEditor->document();
@@ -406,4 +431,8 @@ QString GetCorrectUnicode(const QByteArray& text, QString& code)
     }
 
     return strtext;
+}
+
+void Mainwindow::HelpFunction() {
+    system("start http://xiaodiaodaya.cn/");
 }

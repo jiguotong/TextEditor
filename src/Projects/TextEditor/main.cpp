@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     /*时间有效期为3天，三天后不可用！*/
-    QDateTime baseTime = QDateTime::fromString("2023-05-15 00:00:00", "yyyy-MM-dd hh:mm:ss");       // 规定一个初始化基准时间
+    QDateTime baseTime = QDateTime::fromString("2023-05-17 00:00:00", "yyyy-MM-dd hh:mm:ss");       // 规定一个初始化基准时间
     QDateTime currentTime = QDateTime::currentDateTime();                                           //获取系统当前的时间
     int startTime = baseTime.toTime_t();        //将当前时间转为时间戳
     int endTime = currentTime.toTime_t();       //将当前时间转为时间戳
