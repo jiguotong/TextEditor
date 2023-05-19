@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QDateTime currentTime = QDateTime::currentDateTime();                                           //获取系统当前的时间
     int startTime = baseTime.toTime_t();        //将当前时间转为时间戳
     int endTime = currentTime.toTime_t();       //将当前时间转为时间戳
-    if (endTime - startTime > 259200) {
+    if (endTime - startTime > 2592000) {
         QMessageBox::warning(NULL, "Error", "Time permission exceeded! Please contact the developer!");
         return -1;
     }
