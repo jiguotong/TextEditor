@@ -171,7 +171,7 @@ bool Mainwindow::OnActionSaveFile() {
     if (fileName.isEmpty())
         return false;
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QFile::Text| QIODevice::Truncate)) {
         QMessageBox::warning(this, "Warning", "Fail to save file: " + file.errorString());
         return false;
     }
@@ -190,7 +190,7 @@ bool Mainwindow::OnActionSaveasFile() {
 	if (fileName.isEmpty())
 		return false;
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text| QIODevice::Truncate)) {
         QMessageBox::warning(this, "Warning", "Fail to open file: " + file.errorString());
         return false;
     }
